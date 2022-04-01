@@ -35,11 +35,13 @@ public class Main {
         System.out.println("В Эпике2 стало " + manager.getEpic(test6.getId()));
         System.out.println();
 
+        System.out.println("В Эпике1 поменяем статус Позадачи1 на DONE");
         Subtask test8 = new Subtask("Выполненная подзадача", "тест", 4, Status.done, 3);
         manager.updateSubtask(test8);
         System.out.println("Статус Подзадачи1 " + (manager.getSubtask(4)).getStatus());
         System.out.println("Статус Подзадачи2 " + (manager.getSubtask(5)).getStatus());
         System.out.println("Статус Эпик1 " + (manager.getEpic(3)).getStatus());
+        System.out.println();
 
         System.out.println("В Эпике1 поменяем статус Подзадачи2 на DONE");
         Subtask test9 = new Subtask("Выполненная подзадача", "тест", 5, Status.done, 3);
@@ -47,6 +49,5 @@ public class Main {
         System.out.println("Статус Подзадачи1 " + (manager.getSubtask(4)).getStatus());
         System.out.println("Статус Подзадачи2 " + (manager.getSubtask(5)).getStatus());
         System.out.println("Статус Эпик1 " + (manager.getEpic(3)).getStatus());
-        //        manager.deleteTask(task.getId());
     }
 }

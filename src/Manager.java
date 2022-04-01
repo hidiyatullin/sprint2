@@ -193,9 +193,6 @@ public class Manager {
                 countDone++; // если да, то считаем кол-во таких статусов
             }
         }
-        System.out.println("NEW" + countNew);
-        System.out.println(countDone);
-        System.out.println(epic);
         if (countNew == (epic.getSubtask()).size()) { // сравниваем кол-во статусов NEW с кол-вом подзадач
             epic.setStatus(Status.NEW); // если они совпадают, то присвааиваем эпику статус NEW
         } else if (countDone == (epic.getSubtask()).size()) { // сравниваем кол-во статусов DONE с кол-вом подзадач
@@ -205,25 +202,24 @@ public class Manager {
         }
     }
 
+    /*
+     * Генерирует id
+     */
     public int generatorId() {
         return ++id;
     }
 
+    /*
+     * Обновляет Подзадачу внутри Эпика
+     */
     private void updateSubtaskInEpic(Subtask subtask) {
         int numberOfSubtask;
-        Epic epic = epics.get(subtask.getEpicId()); // нашли эпик, который содержит полученную подзадачу
-//        for (Subtask checkedSubtask : epic.getSubtask()) { // прошлись по всем подзадачам
-//            if (checkedSubtask.getId() == subtask.getId()) { // проверили статус NEW
+        Epic epic = epics.get(subtask.getEpicId()); // находит эпик, который содержит полученную подзадачу
         for (int i = 0; i < (epic.getSubtask()).size(); i++) {
-            if (((epic.getSubtask()).get(i)).getId() == subtask.getId()) {
+            if (((epic.getSubtask()).get(i)).getId() == subtask.getId()) { // находит порядковый номер Подзадачи
                 numberOfSubtask = i;
-                epic.getSubtask().remove(numberOfSubtask);
-//        Iterator<Subtask> subtaskIterator = epic.getSubtask().iterator();
-//        while(subtaskIterator.hasNext()) {
-//            Subtask nextSubtask = subtaskIterator.next();
-//            if (nextSubtask.getId() == subtask.getId()) {
-//                subtaskIterator.remove();
-                } (epic.getSubtask()).add(subtask);
+                epic.getSubtask().remove(numberOfSubtask); // удаляет старую подазадачу
+                } (epic.getSubtask()).add(subtask); // добавляет новую подзадачу
         }
     }
 }
