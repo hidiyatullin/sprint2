@@ -169,6 +169,10 @@ public class Manager {
         if (!epics.containsKey(epicId)) {
             return;
         }
+        ArrayList<Subtask> epicsSubtasks = (epics.get(epicId)).getSubtask(); // получает список подзадач эпика
+        for (Subtask subtask : epicsSubtasks) {
+            subtasks.remove(subtask.getId());
+        }
         epics.remove(epicId);
     }
 
