@@ -1,7 +1,5 @@
 import Manager.Manager;
-import Model.Epic;
-import Model.Subtask;
-import Model.Task;
+import Model.*;
 import Status.Status;
 
 import java.util.ArrayList;
