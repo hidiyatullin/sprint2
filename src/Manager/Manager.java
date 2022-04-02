@@ -1,6 +1,10 @@
+package Manager;
+import Model.*;
+import Status.*;
+
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
+
 
 public class Manager {
     private HashMap<Integer, Task> tasks = new HashMap<>();
