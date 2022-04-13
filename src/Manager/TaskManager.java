@@ -4,6 +4,7 @@ import Model.Epic;
 import Model.Subtask;
 import Model.Task;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public interface TaskManager {
@@ -78,6 +79,11 @@ public interface TaskManager {
     void deleteEpics();
 
     /*
+     * Возвращает подзадачи конкретного эпика
+     */
+    ArrayList<Subtask> getSubtasksFormEpic(Epic epic);
+
+    /*
      * Возвращает эпик по идентификатору
      */
     Epic getEpic(int id);
@@ -96,4 +102,14 @@ public interface TaskManager {
      * Удаляет эпик по идентификатору
      */
     void deleteEpic(int epicId);
+
+    /*
+     * Генерирует id
+     */
+    int generatorId();
+
+    /*
+     * Возвращает список истории
+     */
+    List<Task> getHistory();
 }
