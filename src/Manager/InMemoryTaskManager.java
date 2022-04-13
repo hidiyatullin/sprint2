@@ -4,17 +4,20 @@ import Status.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 
-public class Manager {
+public class InMemoryTaskManager implements TaskManager {
     private HashMap<Integer, Task> tasks = new HashMap<>();
     private HashMap<Integer, Subtask> subtasks = new HashMap<>();
     private HashMap<Integer, Epic> epics = new HashMap<>();
+    HistoryManager history = Managers.getDefaultHistory();
     private int id = 0; // переменная для создания идентификатора
 
     /*
      * Возвращает список всех задач
      */
+    @Override
     public ArrayList<Task> getTasks() {
         return new ArrayList<>(tasks.values());
     }
@@ -22,6 +25,7 @@ public class Manager {
     /*
      * Удаляет все задачи
      */
+    @Override
     public void deleteTasks() {
         tasks.clear();
     }
@@ -29,13 +33,16 @@ public class Manager {
     /*
      * Возвращает задачу по идентификатору
      */
+    @Override
     public Task getTask(int id) {
+        history.add(tasks.get(id));
         return tasks.get(id);
     }
 
     /*
      * Создаёт новую задачу
      */
+    @Override
     public Task newTask(Task task) {
         task.setId(generatorId());
         tasks.put(task.getId(), task);
@@ -45,6 +52,7 @@ public class Manager {
     /*
      * Обновляет задачу
      */
+    @Override
     public void updateTask(Task task) {
         if (!tasks.containsKey(task.getId())) {
             return;
@@ -55,6 +63,7 @@ public class Manager {
     /*
      * Удаляет задачу по её идентификатору
      */
+    @Override
     public void deleteTask(int id) {
         if (!tasks.containsKey(id)) {
             return;
@@ -65,13 +74,15 @@ public class Manager {
     /*
      * Возвращает список всех подзадач
      */
-    public ArrayList<Subtask> getSubtasks() {
+    @Override
+    public ArrayList<Subtask> getSubtasksFormEpic() {
         return new ArrayList<>(subtasks.values());
     }
 
     /*
      * Удаляет все подзадачи
      */
+    @Override
     public void deleteSubtasks() {
         subtasks.clear();
     }
@@ -79,13 +90,16 @@ public class Manager {
     /*
      * Возвращает подзадачу по идентификатору
      */
+    @Override
     public Subtask getSubtask(int id) {
+        history.add(subtasks.get(id));
         return subtasks.get(id);
     }
 
     /*
      * Добавляет подзадачу
      */
+    @Override
     public Subtask newSubtask(Subtask subtask) {
         subtask.setId(generatorId());
         subtasks.put(subtask.getId(), subtask);
@@ -104,6 +118,7 @@ public class Manager {
     /*
      * Обновляет подзадачу
      */
+    @Override
     public void updateSubtask(Subtask subtask) {
         if (!subtasks.containsKey(subtask.getId())) {
             System.out.println("Нет подзадачи с id " + subtask.getId());
@@ -117,6 +132,7 @@ public class Manager {
     /*
      * Удаляет подзадачу по идентификатору
      */
+    @Override
     public void deleteSubtask(int id) {
         if (!subtasks.containsKey(id)) {
             return;
@@ -127,6 +143,7 @@ public class Manager {
     /*
      * Возвращает список всех эпиков
      */
+    @Override
     public ArrayList<Epic> getEpics() {
         return new ArrayList<>(epics.values());
     }
@@ -134,6 +151,7 @@ public class Manager {
     /*
      * Удаляет все эпики
      */
+    @Override
     public void deleteEpics() {
         epics.clear();
     }
@@ -141,13 +159,16 @@ public class Manager {
     /*
      * Возвращает эпик по идентификатору
      */
+    @Override
     public Epic getEpic(int id) {
+        history.add(epics.get(id));
         return epics.get(id);
     }
 
     /*
      * Создаёт новый эпик
      */
+    @Override
     public Epic newEpic(Epic epic) {
         epic.setId(generatorId());
         epics.put(epic.getId(), epic);
@@ -157,6 +178,7 @@ public class Manager {
     /*
      * Обновляет эпик
      */
+    @Override
     public void updateEpic(Epic epic) {
         if (!epics.containsKey(epic.getId())) {
             return;
@@ -169,6 +191,7 @@ public class Manager {
     /*
      * Удаляет эпик по идентификатору
      */
+    @Override
     public void deleteEpic(int epicId) {
         if (!epics.containsKey(epicId)) {
             return;
@@ -183,7 +206,7 @@ public class Manager {
     /*
      * Возвращает подзадачи конкретного эпика
      */
-    public ArrayList<Subtask> getSubtasks(Epic epic) {
+    public ArrayList<Subtask> getSubtasksFormEpic(Epic epic) {
         return epic.getSubtask();
     }
 
@@ -192,21 +215,21 @@ public class Manager {
      */
     private void statusOfEpic(Subtask subtask) {
         int countNew = 0; // переменная для подсчёта статусов NEW
-        int countDone = 0; // переменная для подсчёта статусов DONE
+        int countDONE = 0; // переменная для подсчёта статусов DONE
         Epic epic = epics.get(subtask.getEpicId()); // нашли эпик, который содержит полученную подзадачу
         for (Subtask checkedSubtask : epic.getSubtask()) { // прошлись по всем подзадачам и получили их статусы
             if (checkedSubtask.getStatus().equals(Status.NEW)) { // проверили статус NEW
                 countNew++; // если да, то считаем кол-во таких статусов
-            } else if (checkedSubtask.getStatus().equals(Status.done)) { // проверили статус DONE
-                countDone++; // если да, то считаем кол-во таких статусов
+            } else if (checkedSubtask.getStatus().equals(Status.DONE)) { // проверили статус DONE
+                countDONE++; // если да, то считаем кол-во таких статусов
             }
         }
         if (countNew == (epic.getSubtask()).size()) { // сравниваем кол-во статусов NEW с кол-вом подзадач
             epic.setStatus(Status.NEW); // если они совпадают, то присвааиваем эпику статус NEW
-        } else if (countDone == (epic.getSubtask()).size()) { // сравниваем кол-во статусов DONE с кол-вом подзадач
-            epic.setStatus(Status.done); // если они совпадают, то присвааиваем эпику статус DONE
+        } else if (countDONE == (epic.getSubtask()).size()) { // сравниваем кол-во статусов DONE с кол-вом подзадач
+            epic.setStatus(Status.DONE); // если они совпадают, то присвааиваем эпику статус DONE
         } else {
-            epic.setStatus(Status.inProgress); // если ни то ни другое, то присваиваем статус IN_PROGRESS
+            epic.setStatus(Status.IN_PROGRESS); // если ни то ни другое, то присваиваем статус IN_PROGRESS
         }
     }
 
@@ -230,4 +253,11 @@ public class Manager {
                 } (epic.getSubtask()).add(subtask); // добавляет новую подзадачу
         }
     }
+
+    public void getHistory() {
+        for (Task task : history.getHistory()) {
+            System.out.println(task);
+        }
+    }
+
 }

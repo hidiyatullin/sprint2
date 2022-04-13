@@ -1,12 +1,12 @@
-import Manager.Manager;
+import Manager.*;
 import Model.*;
-import Status.Status;
+import Status.*;
 
 import java.util.ArrayList;
 
 public class Main {
     public static void main(String[] args) {
-        Manager manager = new Manager();
+        InMemoryTaskManager manager = new InMemoryTaskManager();
 
         Task test1 = new Task("Задача1", "тест", 0, Status.NEW);
         manager.newTask(test1);
@@ -38,9 +38,10 @@ public class Main {
         System.out.println("В Эпик2 добавили 1 Подзадачу " + manager.getSubtask(test7.getId()));
         System.out.println("В Эпике2 стало " + manager.getEpic(test6.getId()));
         System.out.println();
+        manager.getHistory();
 
         System.out.println("В Эпике1 поменяем статус Позадачи1 на DONE");
-        Subtask test8 = new Subtask("Выполненная подзадача", "тест", 4, Status.done, 3);
+        Subtask test8 = new Subtask("Выполненная подзадача", "тест", 4, Status.DONE, 3);
         manager.updateSubtask(test8);
         System.out.println("Статус Подзадачи1 " + (manager.getSubtask(4)).getStatus());
         System.out.println("Статус Подзадачи2 " + (manager.getSubtask(5)).getStatus());
@@ -48,10 +49,20 @@ public class Main {
         System.out.println();
 
         System.out.println("В Эпике1 поменяем статус Подзадачи2 на DONE");
-        Subtask test9 = new Subtask("Выполненная подзадача", "тест", 5, Status.done, 3);
+        Subtask test9 = new Subtask("Выполненная подзадача", "тест", 5, Status.DONE, 3);
         manager.updateSubtask(test9);
         System.out.println("Статус Подзадачи1 " + (manager.getSubtask(4)).getStatus());
         System.out.println("Статус Подзадачи2 " + (manager.getSubtask(5)).getStatus());
         System.out.println("Статус Эпик1 " + (manager.getEpic(3)).getStatus());
+
+        manager.getHistory();
+
+        manager.getEpic(3);
+        manager.getEpic(3);
+        manager.getEpic(3);
+        System.out.println();
+
+        manager.getHistory();
+
     }
 }
