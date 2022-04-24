@@ -47,6 +47,8 @@ public class Main {
         System.out.println("Статус Подзадачи2 " + (manager.getSubtask(5)).getStatus());
         System.out.println("Статус Эпик1 " + (manager.getEpic(3)).getStatus());
         System.out.println();
+        System.out.println(manager.getHistory());
+
 
         System.out.println("В Эпике1 поменяем статус Подзадачи2 на DONE");
         Subtask test9 = new Subtask("Выполненная подзадача", "тест", 5, Status.DONE, 3);
@@ -55,14 +57,19 @@ public class Main {
         System.out.println("Статус Подзадачи2 " + (manager.getSubtask(5)).getStatus());
         System.out.println("Статус Эпик1 " + (manager.getEpic(3)).getStatus());
 
-        System.out.println(manager.getHistory());
+        System.out.println("Получаем историю " + manager.getHistory());
 
-        manager.getEpic(3);
-        manager.getEpic(3);
         manager.getEpic(3);
         System.out.println();
 
-        System.out.println(manager.getHistory());
+        System.out.println("Получаем историю " + manager.getHistory());
+
+        manager.deleteEpics();
+        System.out.println("Получаем эпики " + manager.getEpics());
+        System.out.println("Получаем историю " + manager.getHistory());
+
+//        System.out.println(manager.getHistory());
+
 
     }
 }
