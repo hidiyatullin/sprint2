@@ -5,24 +5,24 @@ import Model.Task;
 import java.util.*;
 
 public class InMemoryHistoryManager implements HistoryManager {
-        Map<Integer, Node<Task>> history = new HashMap<>();
+    private Map<Integer, Node<Task>> history = new HashMap<>();
 
-    Node<Task> first;
-    Node<Task> last;
+    private Node<Task> first;
+    private Node<Task> last;
 
-        private static class Node <Task> {
-            Task item;
-            Node<Task> next;
-            Node<Task> prev;
+    private static class Node<Task> {
+        private Task item;
+        private Node<Task> next;
+        private Node<Task> prev;
 
-            Node(Node<Task> prev, Task element, Node<Task> next) {
-                this.item = element;
-                this.next = next;
-                this.prev = prev;
-            }
+        Node(Node<Task> prev, Task element, Node<Task> next) {
+            this.item = element;
+            this.next = next;
+            this.prev = prev;
         }
+    }
 
-    void linkLast(Task task) {
+    private void linkLast(Task task) {
         final Node<Task> last = this.last;
         final Node<Task> newNode = new Node<>(last, task, null);
         this.last = newNode;
@@ -35,7 +35,6 @@ public class InMemoryHistoryManager implements HistoryManager {
 
     @Override
     public List<Task> getHistory() {
-        System.out.println(history.values());
         List<Task> list = new ArrayList<>();
         Node<Task> node = first;
         while (node != null) {
@@ -52,33 +51,33 @@ public class InMemoryHistoryManager implements HistoryManager {
             removeNode(node);
         }
         linkLast(task);
-        }
+    }
 
     @Override
-    public void remove(Task task) {
-        final Node<Task> node = history.get(task.getId());
+    public void remove(int id) {
+        final Node<Task> node = history.get(id);
         if (node != null) {
             removeNode(node);
         }
-        history.remove(task.getId());
+        history.remove(id);
     }
 
     private void removeNode(Node<Task> node) {
-            if (node != null) {
-                Node nodePrev = node.prev;
-                Node nodeNext = node.next;
-                if (nodePrev == null) {
-                    first = nodeNext;
-//                    nodeNext.prev = null;
-                } else if (nodeNext == null) {
-                    last = nodePrev;
-                    last.next = null;
-                } else {
-                    nodeNext.prev = nodePrev;
-                    nodePrev.next = nodeNext;
-                    node.next = null;
-                    node.prev = null;
-                }
-            }
+        Node nodePrev = node.prev;
+        Node nodeNext = node.next;
+        if ((nodeNext == null) && (nodePrev == null)) {
+            first = null;
+            last = null;
+        } else if (nodePrev == null) {
+            first = nodeNext;
+        } else if (nodeNext == null) {
+            last = nodePrev;
+            last.next = null;
+        } else {
+            nodeNext.prev = nodePrev;
+            nodePrev.next = nodeNext;
+            node.next = null;
+            node.prev = null;
         }
     }
+}

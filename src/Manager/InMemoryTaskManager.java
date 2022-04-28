@@ -27,6 +27,9 @@ public class InMemoryTaskManager implements TaskManager {
      */
     @Override
     public void deleteTasks() {
+        for (Task task : tasks.values()) {
+            history.remove(task.getId());
+        }
         tasks.clear();
      }
 
@@ -68,7 +71,7 @@ public class InMemoryTaskManager implements TaskManager {
         if (!tasks.containsKey(id)) {
             return;
         }
-        history.remove(tasks.get(id));
+        history.remove(id);
         tasks.remove(id);
     }
 
@@ -86,10 +89,11 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public void deleteSubtasks() {
         for (Subtask subtask : subtasks.values()) {
-            history.remove(subtask);
+            history.remove(subtask.getId());
+            subtasks.remove(subtask.getId());
+            statusOfEpic(subtask);
         }
-        subtasks.clear();
-    }
+     }
 
     /*
      * Возвращает подзадачу по идентификатору
@@ -141,7 +145,7 @@ public class InMemoryTaskManager implements TaskManager {
         if (!subtasks.containsKey(id)) {
             return;
         }
-        history.remove(subtasks.get(id));
+        history.remove(id);
         subtasks.remove(id);
     }
 
@@ -158,12 +162,12 @@ public class InMemoryTaskManager implements TaskManager {
      */
     @Override
     public void deleteEpics() {
-        for (int EpicId : epics.keySet()) {
-            ArrayList<Subtask> epicsSubtasks = epics.get(EpicId).getSubtask(); // получает список подзадач эпика
+        for (int epicId : epics.keySet()) {
+            ArrayList<Subtask> epicsSubtasks = epics.get(epicId).getSubtask(); // получает список подзадач эпика
             for (Subtask subtask : epicsSubtasks) {
-                history.remove(subtask);
                 subtasks.remove(subtask.getId());
-                history.remove(epics.get(EpicId));
+                history.remove(subtask.getId());
+                history.remove(epicId);
             }
         }
         epics.clear();
@@ -212,8 +216,9 @@ public class InMemoryTaskManager implements TaskManager {
         ArrayList<Subtask> epicsSubtasks = (epics.get(epicId)).getSubtask(); // получает список подзадач эпика
         for (Subtask subtask : epicsSubtasks) {
             subtasks.remove(subtask.getId());
-            history.remove(subtask);
+            history.remove(subtask.getId());
         }
+        history.remove(epicId);
         epics.remove(epicId);
     }
 

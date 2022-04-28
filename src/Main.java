@@ -38,7 +38,7 @@ public class Main {
         System.out.println("В Эпик2 добавили 1 Подзадачу " + manager.getSubtask(test7.getId()));
         System.out.println("В Эпике2 стало " + manager.getEpic(test6.getId()));
         System.out.println();
-        System.out.println(manager.getHistory());
+        System.out.println("Получаем историю: " + manager.getHistory());
 
         System.out.println("В Эпике1 поменяем статус Позадачи1 на DONE");
         Subtask test8 = new Subtask("Выполненная подзадача", "тест", 4, Status.DONE, 3);
@@ -47,7 +47,7 @@ public class Main {
         System.out.println("Статус Подзадачи2 " + (manager.getSubtask(5)).getStatus());
         System.out.println("Статус Эпик1 " + (manager.getEpic(3)).getStatus());
         System.out.println();
-        System.out.println(manager.getHistory());
+        System.out.println("Получаем историю: " + manager.getHistory());
 
 
         System.out.println("В Эпике1 поменяем статус Подзадачи2 на DONE");
@@ -64,12 +64,10 @@ public class Main {
 
         System.out.println("Получаем историю " + manager.getHistory());
 
-        manager.deleteEpics();
         System.out.println("Получаем эпики " + manager.getEpics());
-        System.out.println("Получаем историю " + manager.getHistory());
-
-//        System.out.println(manager.getHistory());
-
-
+        System.out.println("Удаляем все эпики");
+        manager.deleteEpics();
+        System.out.println("Получаем эпики после их удаления" + manager.getEpics());
+        System.out.println("Получаем историю после удаления эпиков " + manager.getHistory());
     }
 }
