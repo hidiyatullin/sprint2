@@ -147,6 +147,7 @@ public class InMemoryTaskManager implements TaskManager {
         }
         history.remove(id);
         subtasks.remove(id);
+        statusOfEpic(subtasks.get(id));
     }
 
     /*
@@ -167,8 +168,8 @@ public class InMemoryTaskManager implements TaskManager {
             for (Subtask subtask : epicsSubtasks) {
                 subtasks.remove(subtask.getId());
                 history.remove(subtask.getId());
-                history.remove(epicId);
             }
+                history.remove(epicId);
         }
         epics.clear();
     }
