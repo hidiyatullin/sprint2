@@ -2,6 +2,9 @@ package Model;
 
 import Status.Status;
 
+import static Model.TypeOfTask.SUBTASK;
+import static Model.TypeOfTask.TASK;
+
 public class Subtask extends Task {
     private int epicId;
 
@@ -31,5 +34,10 @@ public class Subtask extends Task {
                 ", status='" + getStatus() + '\'' +
                 ", epicId=" + epicId +
                 '}';
+    }
+
+    @Override
+    public TypeOfTask getType() {
+        return TypeOfTask.SUBTASK;
     }
 }

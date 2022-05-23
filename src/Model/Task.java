@@ -3,6 +3,8 @@ import Status.*;
 
 import java.util.Objects;
 
+import static Model.TypeOfTask.TASK;
+
 public class Task {
 
     private String name;
@@ -62,6 +64,10 @@ public class Task {
         this.status = status;
     }
 
+    public TypeOfTask getType() {
+        return TypeOfTask.TASK;
+    }
+
     @Override
     public String toString() {
         return "Tasks.Task{" +
@@ -71,5 +77,5 @@ public class Task {
                 ", status='" + status + '\'' +
                 '}';
     }
-}
+    }
 

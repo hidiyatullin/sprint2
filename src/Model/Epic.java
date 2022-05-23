@@ -2,6 +2,9 @@ package Model;
 import Status.*;
 import java.util.ArrayList;
 
+import static Model.TypeOfTask.EPIC;
+import static Model.TypeOfTask.TASK;
+
 public class Epic extends Task {
     private ArrayList<Subtask> subtasks;
     public Epic(String name, String description, int id, Status status) {
@@ -30,5 +33,17 @@ public class Epic extends Task {
                 ", status='" + getStatus() + '\'' +
                 ", subtasks=" + subtasks +
                 '}';
+    }
+
+    @Override
+    public TypeOfTask getType() {
+        return TypeOfTask.EPIC;
+    }
+
+    public void addSubtask(Subtask subtask) {
+        if (subtasks == null) {
+            subtasks = new ArrayList<>();
+        }
+            subtasks.add(subtask);
     }
 }

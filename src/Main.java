@@ -2,6 +2,7 @@ import Manager.*;
 import Model.*;
 import Status.*;
 
+import java.io.File;
 import java.util.ArrayList;
 
 public class Main {
@@ -27,6 +28,9 @@ public class Main {
         System.out.println("В Эпик1 добавили 2 Подзадачи " + manager.getEpic(test3.getId()) + "с id " + test4.getId() + " и " + test5.getId());
         System.out.println("Статус Эпик1 " + test3.getStatus());
         System.out.println();
+
+//        TaskManager manager1 = new FileBackedTasksManager(new File("task.csv"), true);
+
 
         ArrayList<Subtask> subtasks2 = new ArrayList<>();
         Epic test6 = new Epic("Эпик2", "тест", 0, Status.NEW, subtasks2);
@@ -62,12 +66,36 @@ public class Main {
         manager.getEpic(3);
         System.out.println();
 
-        System.out.println("Получаем историю " + manager.getHistory());
+//        System.out.println("Получаем историю " + manager.getHistory());
+//
+//        System.out.println("Получаем эпики " + manager.getEpics());
+//        System.out.println("Удаляем все эпики");
+//        manager.deleteEpics();
+//        System.out.println("Получаем эпики после их удаления" + manager.getEpics());
+//        System.out.println("Получаем историю после удаления эпиков " + manager.getHistory());
 
-        System.out.println("Получаем эпики " + manager.getEpics());
-        System.out.println("Удаляем все эпики");
-        manager.deleteEpics();
-        System.out.println("Получаем эпики после их удаления" + manager.getEpics());
-        System.out.println("Получаем историю после удаления эпиков " + manager.getHistory());
+        TaskManager manager1 = new FileBackedTasksManager(new File("task.csv"), true);
+
+
+        if (manager.getEpics().equals(manager1.getEpics())) {
+            System.out.println("Эпики совпали");
+        } else {
+            System.out.println("Эпики не совпали");
+        }
+        if (manager.getTasks().equals(manager1.getTasks())) {
+            System.out.println("Задачи совпали");
+        } else {
+            System.out.println("Задачи не совпали");
+        }
+        if (manager.getHistory().equals(manager1.getHistory())) {
+            System.out.println("Истории совпали");
+        } else {
+            System.out.println("Истории не совпали");
+            System.out.println(manager.getHistory());
+            System.out.println(manager1.getHistory());
     }
-}
+        }
+
+
+    }
+

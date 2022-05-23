@@ -8,11 +8,11 @@ import java.util.List;
 
 
 public class InMemoryTaskManager implements TaskManager {
-    private HashMap<Integer, Task> tasks = new HashMap<>();
-    private HashMap<Integer, Subtask> subtasks = new HashMap<>();
-    private HashMap<Integer, Epic> epics = new HashMap<>();
-    private HistoryManager history = Managers.getDefaultHistory();
-    private int id = 0; // переменная для создания идентификатора
+    protected HashMap<Integer, Task> tasks = new HashMap<>();
+    protected HashMap<Integer, Subtask> subtasks = new HashMap<>();
+    protected HashMap<Integer, Epic> epics = new HashMap<>();
+    protected HistoryManager history = Managers.getDefaultHistory();
+    protected int id = 0; // переменная для создания идентификатора
 
     /*
      * Возвращает список всех задач
