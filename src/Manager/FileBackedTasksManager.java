@@ -1,13 +1,9 @@
 package Manager;
 
-import Model.Epic;
-import Model.Subtask;
-import Model.Task;
-import Model.TypeOfTask;
+import Model.*;
 import Status.Status;
 
 import java.io.*;
-import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -172,16 +168,16 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
     }
 
     private String toString(Task task) {
-        String exit = task.getId()
+        String result = task.getId()
                 + "," + task.getType()
                 + "," + task.getName()
                 + "," + task.getStatus()
                 + "," + task.getDescription();
         if (task.getType() == TypeOfTask.SUBTASK) {
             Subtask subtask = (Subtask) task;
-            exit = exit + "," + subtask.getEpicId();
+            result = result + "," + subtask.getEpicId();
         }
-        return exit;
+        return result;
     }
 
     private Task fromString(String value) {
@@ -237,7 +233,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
             writer.newLine();
             writer.append(toString(history));
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new ManagerSaveException("Ошибка сохранения");
         }
     }
 
@@ -259,11 +255,14 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
                 } else if (task.getType() == TypeOfTask.SUBTASK) {
                     Subtask subtask = (Subtask) task;
                     subtasks.put(id, subtask);
-                    if (epics.get(subtask.getEpicId()) == null) {
-                        System.out.println("Сначала требуется создать Эпик");
-                    } else {
+                    try {
                         Epic epic = epics.get(subtask.getEpicId());
+                        if (epics.get(subtask.getEpicId()) == null) {
+                        throw new ManagerSaveException("Сначала требуется создать Эпик");
+                    }
                         epic.addSubtask(subtask);
+                    } catch (ManagerSaveException exception) {
+                        System.out.println(exception.getMessage());
                     }
                 }
                 if (maxId < id) {
@@ -281,7 +280,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
                 }
             }
         } catch (IOException e) {
-            throw new RuntimeException("Error load from file: " + file.getName(), e);
+            throw new ManagerSaveException("Ошибка загрузки файла: " + file.getName());
         }
         this.id = maxId;
     }
