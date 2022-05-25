@@ -255,15 +255,8 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
                 } else if (task.getType() == TypeOfTask.SUBTASK) {
                     Subtask subtask = (Subtask) task;
                     subtasks.put(id, subtask);
-                    try {
-                        Epic epic = epics.get(subtask.getEpicId());
-                        if (epics.get(subtask.getEpicId()) == null) {
-                        throw new ManagerSaveException("Сначала требуется создать Эпик");
-                    }
-                        epic.addSubtask(subtask);
-                    } catch (ManagerSaveException exception) {
-                        System.out.println(exception.getMessage());
-                    }
+                    Epic epic = epics.get(subtask.getEpicId());
+                    epic.addSubtask(subtask);
                 }
                 if (maxId < id) {
                     maxId = id;
