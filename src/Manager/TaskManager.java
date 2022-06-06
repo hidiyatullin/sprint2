@@ -41,7 +41,7 @@ public interface TaskManager {
     /*
      * Возвращает список всех подзадач
      */
-    List<Subtask> getSubtasksFormEpic();
+    List<Subtask> getSubtasks();
 
     /*
      * Удаляет все подзадачи

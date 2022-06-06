@@ -79,7 +79,7 @@ public class InMemoryTaskManager implements TaskManager {
      * Возвращает список всех подзадач
      */
     @Override
-    public ArrayList<Subtask> getSubtasksFormEpic() {
+    public ArrayList<Subtask> getSubtasks() {
         return new ArrayList<>(subtasks.values());
     }
 
@@ -110,10 +110,10 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public Subtask newSubtask(Subtask subtask) {
         subtask.setId(generatorId());
-        subtasks.put(subtask.getId(), subtask);
         if (epics.get(subtask.getEpicId()) == null) {
             System.out.println("Сначала требуется создать Эпик");
         } else {
+            subtasks.put(subtask.getId(), subtask);
             Epic epic = epics.get(subtask.getEpicId());
             ArrayList<Subtask> epicsSubtasks = epic.getSubtask(); // получает список подзадач эпика
             epicsSubtasks.add(subtask); // добавляет доп. подзадачу в список
@@ -146,8 +146,10 @@ public class InMemoryTaskManager implements TaskManager {
             return;
         }
         history.remove(id);
+        Subtask subtaskForRemove = subtasks.get(id);
         subtasks.remove(id);
-        statusOfEpic(subtasks.get(id));
+        deleteSubtaskFromEpic(subtaskForRemove);
+        statusOfEpic(subtaskForRemove);
     }
 
     /*
@@ -273,6 +275,20 @@ public class InMemoryTaskManager implements TaskManager {
                 numberOfSubtask = i;
                 epic.getSubtask().remove(numberOfSubtask); // удаляет старую подазадачу
                 } (epic.getSubtask()).add(subtask); // добавляет новую подзадачу
+        }
+    }
+
+    /*
+     * Удаляет Подзадачу из списка в Эпике
+     */
+    private void deleteSubtaskFromEpic(Subtask subtask) {
+        int numberOfSubtask;
+        Epic epic = epics.get(subtask.getEpicId()); // находит эпик, который содержит полученную подзадачу
+        for (int i = 0; i < (epic.getSubtask()).size(); i++) {
+            if (((epic.getSubtask()).get(i)).getId() == subtask.getId()) { // находит порядковый номер Подзадачи
+                numberOfSubtask = i;
+                epic.getSubtask().remove(numberOfSubtask); // удаляет подзадачу
+                }
         }
     }
 

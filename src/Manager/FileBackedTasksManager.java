@@ -69,8 +69,8 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
     }
 
     @Override
-    public ArrayList<Subtask> getSubtasksFormEpic() {
-        ArrayList<Subtask> subtasksFormEpic = super.getSubtasksFormEpic();
+    public ArrayList<Subtask> getSubtasks() {
+        ArrayList<Subtask> subtasksFormEpic = super.getSubtasks();
         save();
         return subtasksFormEpic;
     }
@@ -263,13 +263,15 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
                 }
             }
             String line = reader.readLine();
-            for (Integer id : historyFromString(line)) {
-                if (tasks.containsKey(id)) {
-                    history.add(tasks.get(id));
-                } else if (subtasks.containsKey(id)) {
-                    history.add(subtasks.get(id));
-                } else if (epics.containsKey(id)) {
-                    history.add(epics.get(id));
+            if (!(line == null)) {
+                for (Integer id : historyFromString(line)) {
+                    if (tasks.containsKey(id)) {
+                        history.add(tasks.get(id));
+                    } else if (subtasks.containsKey(id)) {
+                        history.add(subtasks.get(id));
+                    } else if (epics.containsKey(id)) {
+                        history.add(epics.get(id));
+                    }
                 }
             }
         } catch (IOException e) {

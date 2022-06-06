@@ -10,7 +10,7 @@ public class InMemoryHistoryManager implements HistoryManager {
     private Node<Task> first;
     private Node<Task> last;
 
-    private static class Node<Task> {
+    protected static class Node<Task> {
         private Task item;
         private Node<Task> next;
         private Node<Task> prev;
@@ -51,6 +51,15 @@ public class InMemoryHistoryManager implements HistoryManager {
             removeNode(node);
         }
         linkLast(task);
+
+//        if (task == null) {
+//            return;
+//        }
+//        final Node<Task> node = history.get(task.getId());
+//        if (node != null) {
+//            removeNode(node);
+//        }
+//        linkLast(task);
     }
 
     @Override

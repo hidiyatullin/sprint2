@@ -1,16 +1,28 @@
 package Model;
 import Status.*;
 
+import java.time.LocalDateTime;
 import java.util.Objects;
-
-import static Model.TypeOfTask.TASK;
 
 public class Task {
 
-    private String name;
-    private String description;
-    private int id;
-    private Status status;
+    protected String name;
+    protected String description;
+    protected int id;
+    protected Status status;
+    protected LocalDateTime startTime;
+    protected int duration;
+    protected LocalDateTime endTime;
+
+    public Task(String name, String description, int id, Status status, LocalDateTime startTime, int duration) {
+        this.name = name;
+        this.description = description;
+        this.id = id;
+        this.status = status;
+        this.startTime = startTime;
+        this.duration = duration;
+        this.endTime = startTime.plusMinutes(duration);
+    }
 
     public Task(String name, String description, int id, Status status) {
         this.name = name;
