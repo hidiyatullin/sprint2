@@ -72,14 +72,14 @@ abstract class ManagerTest {
 
     @Test
     void getSubtasksFormEpic() {
-        Subtask test4 = new Subtask("Подзадача1", "тест", 0, Status.NEW, 2);
+        Subtask test4 = new Subtask("Подзадача1", "тест", 0, Status.NEW, LocalDateTime.now(), 15, 2);
         manager.newSubtask(test4);
         assertEquals(1, manager.getSubtasksFormEpic(epic).size());
     }
 
     @Test
     void deleteSubtasks() {
-        Subtask test4 = new Subtask("Подзадача1", "тест", 0, Status.NEW, 2);
+        Subtask test4 = new Subtask("Подзадача1", "тест", 0, Status.NEW, LocalDateTime.now(), 15, 2);
         manager.newSubtask(test4);
         manager.deleteSubtasks();
         assertEquals(0, manager.getSubtasks().size());
@@ -87,39 +87,39 @@ abstract class ManagerTest {
 
     @Test
     void getSubtask() {
-        Subtask test4 = new Subtask("Подзадача1", "тест", 0, Status.NEW, 2);
+        Subtask test4 = new Subtask("Подзадача1", "тест", 0, Status.NEW, LocalDateTime.now(), 15, 2);
         manager.newSubtask(test4);
         assertEquals("Подзадача1", manager.getSubtask(3).getName());
     }
 
     @Test
     void newSubtask() {
-        Subtask test4 = new Subtask("Подзадача1", "тест", 0, Status.NEW, 2);
+        Subtask test4 = new Subtask("Подзадача1", "тест", 0, Status.NEW, LocalDateTime.now(), 15, 2);
         manager.newSubtask(test4);
         assertEquals("Подзадача1", manager.getSubtask(3).getName());
     }
 
     @Test
     void newSubtaskFalse() {
-        Subtask test4 = new Subtask("Подзадача1", "тест", 0, Status.NEW, 5);
+        Subtask test4 = new Subtask("Подзадача1", "тест", 0, Status.NEW, LocalDateTime.now(), 15, 5);
         manager.newSubtask(test4);
         assertEquals(0, manager.getSubtasks().size());
     }
 
     @Test
     void updateSubtask() {
-        Subtask test4 = new Subtask("Подзадача1", "тест", 0, Status.NEW, 2);
+        Subtask test4 = new Subtask("Подзадача1", "тест", 0, Status.NEW, LocalDateTime.now(), 15, 2);
         manager.newSubtask(test4);
-        Subtask test5 = new Subtask("Подзадача2", "тест", 3, Status.NEW, 2);
+        Subtask test5 = new Subtask("Подзадача2", "тест", 3, Status.NEW, LocalDateTime.now(), 15, 2);
         manager.updateSubtask(test5);
         assertEquals("Подзадача2", manager.getSubtask(3).getName());
     }
 
     @Test
     void deleteSubtask() {
-        Subtask test4 = new Subtask("Подзадача1", "тест", 0, Status.NEW, 2);
+        Subtask test4 = new Subtask("Подзадача1", "тест", 0, Status.NEW, LocalDateTime.now(), 15, 2);
         manager.newSubtask(test4);
-        Subtask test5 = new Subtask("Подзадача2", "тест", 3, Status.NEW, 2);
+        Subtask test5 = new Subtask("Подзадача2", "тест", 3, Status.NEW, LocalDateTime.now(), 15, 2);
         manager.newSubtask(test5);
         manager.deleteSubtask(3);
         assertEquals(1, manager.getSubtasks().size());
@@ -168,7 +168,7 @@ abstract class ManagerTest {
         assertEquals(1, manager.getEpics().size());
         Epic epic2 = new Epic("Эпик2", "тест", 0, Status.NEW, subtasks);
         manager.newEpic(epic2);
-        Subtask test4 = new Subtask("Подзадача1", "тест", 0, Status.NEW, 3);
+        Subtask test4 = new Subtask("Подзадача1", "тест", 0, Status.NEW, LocalDateTime.now(), 15, 3);
         manager.newSubtask(test4);
         assertEquals(2, manager.getEpics().size());
         manager.deleteEpic(3);
@@ -201,30 +201,30 @@ abstract class ManagerTest {
 
     @Test
     void epicWithNewSubtasks() {
-        Subtask test4 = new Subtask("Подзадача1", "тест", 0, Status.NEW, 2);
+        Subtask test4 = new Subtask("Подзадача1", "тест", 0, Status.NEW, LocalDateTime.now(), 15, 2);
         manager.newSubtask(test4);
         assertEquals(Status.NEW, manager.getEpic(2).getStatus());
     }
 
     @Test
     void epicWithInProgressSubtasks() {
-        Subtask test4 = new Subtask("Подзадача1", "тест", 0, Status.IN_PROGRESS, 2);
+        Subtask test4 = new Subtask("Подзадача1", "тест", 0, Status.IN_PROGRESS, LocalDateTime.now(), 15, 2);
         manager.newSubtask(test4);
         assertEquals(Status.IN_PROGRESS, manager.getEpic(2).getStatus());
     }
 
     @Test
     void epicWithDoneAndNewSubtasks() {
-        Subtask test4 = new Subtask("Подзадача1", "тест", 0, Status.NEW, 2);
+        Subtask test4 = new Subtask("Подзадача1", "тест", 0, Status.NEW, LocalDateTime.now(), 15, 2);
         manager.newSubtask(test4);
-        Subtask test5 = new Subtask("Подзадача2", "тест", 0, Status.DONE, 2);
+        Subtask test5 = new Subtask("Подзадача2", "тест", 0, Status.DONE, LocalDateTime.now(), 15, 2);
         manager.newSubtask(test5);
         assertEquals(Status.IN_PROGRESS, manager.getEpic(2).getStatus());
     }
 
     @Test
     void epicWithDoneSubtasks() {
-        Subtask test4 = new Subtask("Подзадача1", "тест", 0, Status.DONE, 2);
+        Subtask test4 = new Subtask("Подзадача1", "тест", 0, Status.DONE, LocalDateTime.now(), 15, 2);
         manager.newSubtask(test4);
         assertEquals(Status.DONE, manager.getEpic(2).getStatus());
     }

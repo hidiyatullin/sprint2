@@ -10,7 +10,25 @@ public class Task {
     protected String description;
     protected int id;
     protected Status status;
+
+    public LocalDateTime getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(LocalDateTime startTime) {
+        this.startTime = startTime;
+    }
+
+    public LocalDateTime getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(LocalDateTime endTime) {
+        this.endTime = endTime;
+    }
+
     protected LocalDateTime startTime;
+
     protected int duration;
     protected LocalDateTime endTime;
 
@@ -80,6 +98,14 @@ public class Task {
         return TypeOfTask.TASK;
     }
 
+    public int getDuration() {
+        return duration;
+    }
+
+    public void setDuration(int duration) {
+        this.duration = duration;
+    }
+
     @Override
     public String toString() {
         return "Tasks.Task{" +
@@ -87,6 +113,7 @@ public class Task {
                 ", description='" + description + '\'' +
                 ", id=" + id +
                 ", status='" + status + '\'' +
+                ", start=" + startTime +
                 '}';
     }
     }

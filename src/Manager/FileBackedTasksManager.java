@@ -4,6 +4,7 @@ import Model.*;
 import Status.Status;
 
 import java.io.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -172,7 +173,10 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
                 + "," + task.getType()
                 + "," + task.getName()
                 + "," + task.getStatus()
-                + "," + task.getDescription();
+                + "," + task.getDescription()
+                + "," + task.getStartTime()
+                + "," + task.getDuration();
+//                + "," + task.getEndTime();
         if (task.getType() == TypeOfTask.SUBTASK) {
             Subtask subtask = (Subtask) task;
             result = result + "," + subtask.getEpicId();
@@ -184,10 +188,11 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         final String[] key = value.split(",");
         switch (valueOf(key[1])) {
             case TASK:
-                Task task = new Task(key[2], key[4], Integer.parseInt(key[0]), Status.valueOf(key[3]));
+                Task task = new Task(key[2], key[4], Integer.parseInt(key[0]), Status.valueOf(key[3]), LocalDateTime.parse(key[5]), Integer.parseInt(key[6]));
+//                Task task = new Task(key[2], key[4], Integer.parseInt(key[0]), Status.valueOf(key[3]));
                 return task;
             case SUBTASK:
-                Subtask subtask = new Subtask(key[2], key[4], Integer.parseInt(key[0]), Status.valueOf(key[3]), Integer.parseInt(key[5]));
+                Subtask subtask = new Subtask(key[2], key[4], Integer.parseInt(key[0]), Status.valueOf(key[3]), LocalDateTime.parse(key[5]), Integer.parseInt(key[6]), Integer.parseInt(key[7]));
                 return subtask;
             case EPIC:
                 Epic epic = new Epic(key[2], key[4], Integer.parseInt(key[0]), Status.valueOf(key[3]));
@@ -217,7 +222,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
 
     private void save() {
         try (final BufferedWriter writer = new BufferedWriter(new FileWriter(file, UTF_8))) {
-            writer.append("id,type,name,status,description,epic" + "\n");
+            writer.append("id,type,name,status,description,startTime,duration,epicId" + "\n");
             for (Map.Entry<Integer, Task> entry : tasks.entrySet()) {
                 writer.append(toString(entry.getValue()));
                 writer.newLine();
