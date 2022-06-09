@@ -13,6 +13,23 @@ public class InMemoryTaskManager implements TaskManager {
     protected HashMap<Integer, Epic> epics = new HashMap<>();
     protected HistoryManager history = Managers.getDefaultHistory();
     protected int id = 0; // переменная для создания идентификатора
+    TreeSet<Task> prioritizedTasks;
+
+    public InMemoryTaskManager() {
+        Comparator<Task> comparator = new Comparator<Task>() {
+            @Override
+            public int compare(Task o1, Task o2) {
+                if (o1.getStartTime().isBefore(o2.getStartTime())) {
+                    return -1;
+                } else if (o1.getStartTime().isAfter(o2.getStartTime())) {
+                    return 1;
+                } else {
+                    return 0;
+                }
+            }
+        };
+        prioritizedTasks = new TreeSet<>(comparator);
+    }
 
     /*
      * Возвращает список всех задач
@@ -29,6 +46,7 @@ public class InMemoryTaskManager implements TaskManager {
     public void deleteTasks() {
         for (Task task : tasks.values()) {
             history.remove(task.getId());
+            prioritizedTasks.remove(task);
         }
         tasks.clear();
      }
@@ -50,6 +68,7 @@ public class InMemoryTaskManager implements TaskManager {
         task.setId(generatorId());
         checkCrossing(task);
         tasks.put(task.getId(), task);
+        prioritizedTasks.add(task);
         return task;
     }
 
@@ -73,6 +92,7 @@ public class InMemoryTaskManager implements TaskManager {
         if (!tasks.containsKey(id)) {
             return;
         }
+        prioritizedTasks.remove(tasks.get(id));
         history.remove(id);
         tasks.remove(id);
     }
@@ -92,6 +112,7 @@ public class InMemoryTaskManager implements TaskManager {
     public void deleteSubtasks() {
         for (Subtask subtask : subtasks.values()) {
             history.remove(subtask.getId());
+            prioritizedTasks.remove(subtask);
             subtasks.remove(subtask.getId());
             statusOfEpic(subtask);
             durationOfEpic(subtask.getEpicId());
@@ -118,6 +139,7 @@ public class InMemoryTaskManager implements TaskManager {
             System.out.println("Сначала требуется создать Эпик");
         } else {
             subtasks.put(subtask.getId(), subtask);
+            prioritizedTasks.add(subtask);
             Epic epic = epics.get(subtask.getEpicId());
             ArrayList<Subtask> epicsSubtasks = epic.getSubtask(); // получает список подзадач эпика
             epicsSubtasks.add(subtask); // добавляет доп. подзадачу в список
@@ -153,6 +175,7 @@ public class InMemoryTaskManager implements TaskManager {
             return;
         }
         history.remove(id);
+        prioritizedTasks.remove(subtasks.get(id));
         Subtask subtaskForRemove = subtasks.get(id);
         int epicIdOfRemoveSubtask = subtaskForRemove.getEpicId();
         subtasks.remove(id);
@@ -316,43 +339,33 @@ public class InMemoryTaskManager implements TaskManager {
      */
     private void durationOfEpic(int id) {
         int durationSum = 0;
-        LocalDateTime startEpic = LocalDateTime.of(3000, 1, 1, 0, 0, 0, 0);
+        LocalDateTime startEpic = LocalDateTime.MAX;
+        LocalDateTime endEpic = LocalDateTime.MIN;
         Epic epic = epics.get(id); // находит эпик, который содержит полученную подзадачу
         for (Subtask subtask : epic.getSubtask()) {
             durationSum = durationSum + subtask.getDuration();
             if (subtask.getStartTime().isBefore(startEpic)) {
                 startEpic = subtask.getStartTime();
             }
+            if (subtask.getEndTime().isAfter(endEpic)) {
+                endEpic = subtask.getEndTime();
+            }
             }
         epic.setDuration(durationSum);
         epic.setStartTime(startEpic);
+        epic.setEndTime(endEpic);
         }
 
         @Override
-        public TreeSet<Task> getPrioritizedTasks() {
-            Comparator<Task> comparator = new Comparator<Task>() {
-                @Override
-                public int compare(Task o1, Task o2) {
-                    if (o1.getStartTime().isBefore(o2.getStartTime())) {
-                        return -1;
-                    } else if (o1.getStartTime().isAfter(o2.getStartTime())) {
-                        return 1;
-                    } else {
-                        return 0;
-                    }
-                }
-            };
-            TreeSet<Task> prioritizedTasks = new TreeSet<>(comparator);
-            prioritizedTasks.addAll(tasks.values());
-            prioritizedTasks.addAll(subtasks.values());
-            return prioritizedTasks;
+        public List<Task> getPrioritizedTasks() {
+            return new ArrayList<Task>(prioritizedTasks);
         }
 
         public void checkCrossing(Task task) {
-            List<Task> prioritizedTasks = new ArrayList<Task>(getPrioritizedTasks());
-        for (int i = 0; i < prioritizedTasks.size(); i++) {
-            if ((task.getStartTime().isAfter(prioritizedTasks.get(i).getStartTime()) && task.getStartTime().isBefore(prioritizedTasks.get(i).getEndTime())) ||
-                    (task.getStartTime().isBefore(prioritizedTasks.get(i).getStartTime()) && task.getEndTime().isAfter(prioritizedTasks.get(i).getStartTime()))) {
+            List<Task> prioritizedTasksList = new ArrayList<Task>(prioritizedTasks);
+        for (int i = 0; i < prioritizedTasksList.size(); i++) {
+            if ((task.getStartTime().isAfter(prioritizedTasksList.get(i).getStartTime()) && task.getStartTime().isBefore(prioritizedTasksList.get(i).getEndTime())) ||
+                    (task.getStartTime().isBefore(prioritizedTasksList.get(i).getStartTime()) && task.getEndTime().isAfter(prioritizedTasksList.get(i).getStartTime()))) {
                 System.out.println("Нужно изменить время задачи");
             }
         }

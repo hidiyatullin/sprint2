@@ -10,6 +10,9 @@ public class Task {
     protected String description;
     protected int id;
     protected Status status;
+    protected LocalDateTime startTime;
+    protected int duration;
+    protected LocalDateTime endTime;
 
     public LocalDateTime getStartTime() {
         return startTime;
@@ -26,11 +29,6 @@ public class Task {
     public void setEndTime(LocalDateTime endTime) {
         this.endTime = endTime;
     }
-
-    protected LocalDateTime startTime;
-
-    protected int duration;
-    protected LocalDateTime endTime;
 
     public Task(String name, String description, int id, Status status, LocalDateTime startTime, int duration) {
         this.name = name;
