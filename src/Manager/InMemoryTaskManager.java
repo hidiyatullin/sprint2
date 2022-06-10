@@ -1,4 +1,5 @@
 package Manager;
+
 import Model.*;
 import Status.*;
 import com.sun.source.tree.Tree;
@@ -49,7 +50,7 @@ public class InMemoryTaskManager implements TaskManager {
             prioritizedTasks.remove(task);
         }
         tasks.clear();
-     }
+    }
 
     /*
      * Возвращает задачу по идентификатору
@@ -117,7 +118,7 @@ public class InMemoryTaskManager implements TaskManager {
             statusOfEpic(subtask);
             durationOfEpic(subtask.getEpicId());
         }
-     }
+    }
 
     /*
      * Возвращает подзадачу по идентификатору
@@ -202,8 +203,9 @@ public class InMemoryTaskManager implements TaskManager {
             for (Subtask subtask : epicsSubtasks) {
                 subtasks.remove(subtask.getId());
                 history.remove(subtask.getId());
+                prioritizedTasks.remove(subtask);
             }
-                history.remove(epicId);
+            history.remove(epicId);
         }
         epics.clear();
     }
@@ -252,6 +254,7 @@ public class InMemoryTaskManager implements TaskManager {
         for (Subtask subtask : epicsSubtasks) {
             subtasks.remove(subtask.getId());
             history.remove(subtask.getId());
+            prioritizedTasks.remove(subtask);
         }
         history.remove(epicId);
         epics.remove(epicId);
@@ -306,7 +309,8 @@ public class InMemoryTaskManager implements TaskManager {
             if (((epic.getSubtask()).get(i)).getId() == subtask.getId()) { // находит порядковый номер Подзадачи
                 numberOfSubtask = i;
                 epic.getSubtask().remove(numberOfSubtask); // удаляет старую подазадачу
-                } (epic.getSubtask()).add(subtask); // добавляет новую подзадачу
+            }
+            (epic.getSubtask()).add(subtask); // добавляет новую подзадачу
         }
         durationOfEpic(subtask.getEpicId());
     }
@@ -321,7 +325,7 @@ public class InMemoryTaskManager implements TaskManager {
             if (((epic.getSubtask()).get(i)).getId() == subtask.getId()) { // находит порядковый номер Подзадачи
                 numberOfSubtask = i;
                 epic.getSubtask().remove(numberOfSubtask); // удаляет подзадачу
-                }
+            }
         }
         durationOfEpic(subtask.getEpicId());
     }
@@ -332,7 +336,7 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public List<Task> getHistory() {
         return history.getHistory();
-        }
+    }
 
     /*
      * Считает старт и продолжительность Эпика
@@ -350,25 +354,25 @@ public class InMemoryTaskManager implements TaskManager {
             if (subtask.getEndTime().isAfter(endEpic)) {
                 endEpic = subtask.getEndTime();
             }
-            }
+        }
         epic.setDuration(durationSum);
         epic.setStartTime(startEpic);
         epic.setEndTime(endEpic);
-        }
+    }
 
-        @Override
-        public List<Task> getPrioritizedTasks() {
-            return new ArrayList<Task>(prioritizedTasks);
-        }
+    @Override
+    public List<Task> getPrioritizedTasks() {
+        return new ArrayList<Task>(prioritizedTasks);
+    }
 
-        public void checkCrossing(Task task) {
-            List<Task> prioritizedTasksList = new ArrayList<Task>(prioritizedTasks);
+    public void checkCrossing(Task task) {
+        List<Task> prioritizedTasksList = new ArrayList<Task>(prioritizedTasks);
         for (int i = 0; i < prioritizedTasksList.size(); i++) {
             if ((task.getStartTime().isAfter(prioritizedTasksList.get(i).getStartTime()) && task.getStartTime().isBefore(prioritizedTasksList.get(i).getEndTime())) ||
                     (task.getStartTime().isBefore(prioritizedTasksList.get(i).getStartTime()) && task.getEndTime().isAfter(prioritizedTasksList.get(i).getStartTime()))) {
                 System.out.println("Нужно изменить время задачи");
             }
         }
-        }
     }
+}
 
