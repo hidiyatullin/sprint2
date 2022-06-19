@@ -1,22 +1,27 @@
+import Http.KVServer;
+import Http.KVTaskClient;
 import Manager.*;
 import Model.*;
 import Status.*;
+import com.google.gson.Gson;
 
 import java.io.File;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 public class Main {
     public static void main(String[] args) {
         TaskManager manager = Managers.getDefault();
-
+        /*
+         */
         Task test1 = new Task("Задача1", "тест", 0, Status.NEW, LocalDateTime.now(), 15);
         manager.newTask(test1);
         Task test2 = new Task("Задача2", "тест", 0, Status.NEW, LocalDateTime.now(), 15);
         manager.newTask(test2);
         System.out.println("Созданы 2 задачи " + manager.getTasks());
         System.out.println();
-
+/*
         ArrayList<Subtask> subtasks = new ArrayList<>();
         Epic test3 = new Epic("Эпик1", "тест", 0, Status.NEW, subtasks);
         manager.newEpic(test3);
@@ -101,8 +106,33 @@ public class Main {
             System.out.println("Истории не совпали");
             System.out.println(manager.getHistory());
             System.out.println(manager1.getHistory());
-    }
+    }*/
+        Gson gson = new Gson();
+        String json = gson.toJson(manager.getTasks());
+        System.out.println(json);
+
+
+//        KVServer kvServer = null;
+//        try {
+//            kvServer = new KVServer();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+
+//        kvServer.start();
+        KVTaskClient kvTaskClient = null;
+        try {
+            kvTaskClient = new KVTaskClient();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
+        kvTaskClient.put("tasks", json);
+
+        kvTaskClient.load("tasks");
+
+    }
 
 
     }

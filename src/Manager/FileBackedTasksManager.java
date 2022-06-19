@@ -220,7 +220,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         return history;
     }
 
-    private void save() {
+    protected void save() {
         try (final BufferedWriter writer = new BufferedWriter(new FileWriter(file, UTF_8))) {
             writer.append("id,type,name,status,description,startTime,duration,epicId" + "\n");
             for (Map.Entry<Integer, Task> entry : tasks.entrySet()) {
@@ -242,7 +242,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         }
     }
 
-    private void load() {
+    protected void load() {
         int maxId = 0;
         try (final BufferedReader reader = new BufferedReader(new FileReader(file, UTF_8))) {
             reader.readLine(); // Пропускаем заголовок
