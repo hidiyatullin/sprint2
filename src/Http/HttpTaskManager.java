@@ -15,7 +15,11 @@ public class HttpTaskManager extends FileBackedTasksManager {
     KVTaskClient client;
 
     public HttpTaskManager() {
-//    load();
+        try {
+            client = new KVTaskClient();
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

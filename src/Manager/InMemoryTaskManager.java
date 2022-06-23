@@ -70,7 +70,7 @@ public class InMemoryTaskManager implements TaskManager {
         task.setId(generatorId());
         checkCrossing(task);
         tasks.put(task.getId(), task);
-        System.out.println(tasks.values());
+//        System.out.println(tasks.values());
         prioritizedTasks.add(task);
         return task;
     }
