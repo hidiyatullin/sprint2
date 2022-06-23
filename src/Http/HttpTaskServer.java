@@ -239,21 +239,6 @@ public class HttpTaskServer {
         }
     }
 
-    private void handlePrioritet(HttpExchange h) throws IOException {
-        final String query = h.getRequestURI().getQuery();
-        switch (h.getRequestMethod()) {
-            case "GET": {
-                if (query == null) {
-                    final List<Task> history = taskManager.getHistory();
-                    final String response = gson.toJson(history);
-                    System.out.println("Получили историю");
-                    sendText(h, response);
-                    break;
-                }
-            }
-        }
-    }
-
     protected void sendText(HttpExchange h, String text) throws IOException {
         byte[] resp = text.getBytes(UTF_8);
         h.getResponseHeaders().add("Content-Type", "application/json;charset=utf-8");

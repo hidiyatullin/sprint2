@@ -14,7 +14,7 @@ public class Main {
     public static void main(String[] args) {
         TaskManager manager = Managers.getDefault();
         /*
-         */
+*/
         Task test1 = new Task("Задача1", "тест", 0, Status.NEW, LocalDateTime.now(), 15);
         manager.newTask(test1);
 //        System.out.println(manager.getTasks());
@@ -108,9 +108,9 @@ public class Main {
             System.out.println(manager.getHistory());
             System.out.println(manager1.getHistory());
     }*/
-        Gson gson = new Gson();
-        String json = gson.toJson(manager.getTasks());
-        System.out.println(json);
+//        Gson gson = new Gson();
+//        String json = gson.toJson(manager.getTasks());
+//        System.out.println(json);
 
 
 //        KVServer kvServer = null;
@@ -119,21 +119,21 @@ public class Main {
 //        } catch (IOException e) {
 //            e.printStackTrace();
 //        }
-
+//
 //        kvServer.start();
-        KVTaskClient kvTaskClient = null;
-        try {
-            kvTaskClient = new KVTaskClient();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        kvTaskClient.put("tasks", json);
-
-        kvTaskClient.load("tasks");
-
-        manager.getHistory();
+//        KVTaskClient kvTaskClient = null;
+//        try {
+//            kvTaskClient = new KVTaskClient();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
+//        kvTaskClient.put("tasks", json);
+//
+//        kvTaskClient.load("tasks");
+//
+//        manager.getHistory();
 
     }
 
