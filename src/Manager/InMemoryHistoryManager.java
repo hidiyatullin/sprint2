@@ -71,30 +71,30 @@ public class InMemoryHistoryManager implements HistoryManager {
         history.remove(id);
     }
 
-        private void removeNode(Node<Task> node) {
-            // 1. Начало
-            if (node == first) {
-                if (node == last) {
-                    first = null;
-                    last = null;
-                    return;
-                }
-
-                final Node<Task> newFirst = first.next;
-                newFirst.prev = null;
-                first = newFirst;
-                return;
-            }
-            // 3. Конец
+    private void removeNode(Node<Task> node) {
+        // 1. Начало
+        if (node == first) {
             if (node == last) {
-                last = node.prev;
-                node.next = null;
+                first = null;
+                last = null;
                 return;
             }
-            // 2. Середина
-            final Node<Task> prev = node.prev;
-            final Node<Task> next = node.next;
-            prev.next = next;
-            next.prev = prev;
+
+            final Node<Task> newFirst = first.next;
+            newFirst.prev = null;
+            first = newFirst;
+            return;
         }
+        // 3. Конец
+        if (node == last) {
+            last = node.prev;
+            node.next = null;
+            return;
+        }
+        // 2. Середина
+        final Node<Task> prev = node.prev;
+        final Node<Task> next = node.next;
+        prev.next = next;
+        next.prev = prev;
+    }
 }

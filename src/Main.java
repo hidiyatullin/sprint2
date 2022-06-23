@@ -132,6 +132,8 @@ public class Main {
 
         kvTaskClient.load("tasks");
 
+        manager.getHistory();
+
     }
 
 

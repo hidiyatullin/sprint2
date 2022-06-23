@@ -15,7 +15,7 @@ public class InMemoryTaskManager implements TaskManager {
     protected HashMap<Integer, Epic> epics = new HashMap<>();
     protected HistoryManager history = Managers.getDefaultHistory();
     protected int id = 0; // переменная для создания идентификатора
-    TreeSet<Task> prioritizedTasks;
+    protected TreeSet<Task> prioritizedTasks;
 
     public InMemoryTaskManager() {
         Comparator<Task> comparator = new Comparator<Task>() {

@@ -2,6 +2,7 @@ package Http;
 
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpServer;
+import org.junit.jupiter.api.AfterEach;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -33,7 +34,7 @@ public class KVServer {
 		try {
 			System.out.println("\n/load");
 			if (!hasAuth(h)) {
-				System.out.println("Запрос неавторизован, нужен параметр в query API_TOKEN со значением апи-ключа");
+				System.out.println("Запрос не авторизован, нужен параметр в query API_TOKEN со значением апи-ключа");
 				h.sendResponseHeaders(403, 0);
 				return;
 			}
@@ -133,5 +134,10 @@ public class KVServer {
 		h.getResponseHeaders().add("Content-Type", "application/json");
 		h.sendResponseHeaders(200, resp.length);
 		h.getResponseBody().write(resp);
+	}
+
+	public void stop() {
+		System.out.println("Останавливаем сервер");
+		server.stop(1);
 	}
 }
