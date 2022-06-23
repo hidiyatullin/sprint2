@@ -13,10 +13,9 @@ import java.util.ArrayList;
 public class HttpTaskManager extends FileBackedTasksManager {
     Gson gson;
     KVTaskClient client;
-//    int maxId = 0;
 
     public HttpTaskManager() {
-    load();
+//    load();
     }
 
     @Override

@@ -17,6 +17,7 @@ public class Main {
          */
         Task test1 = new Task("Задача1", "тест", 0, Status.NEW, LocalDateTime.now(), 15);
         manager.newTask(test1);
+//        System.out.println(manager.getTasks());
         Task test2 = new Task("Задача2", "тест", 0, Status.NEW, LocalDateTime.now(), 15);
         manager.newTask(test2);
         System.out.println("Созданы 2 задачи " + manager.getTasks());

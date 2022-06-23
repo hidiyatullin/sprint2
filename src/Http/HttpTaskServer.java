@@ -45,13 +45,10 @@ public class HttpTaskServer {
         server.createContext("/tasks/history", this::handleHistory);
     }
 
-
     public static Gson getGson() {
         GsonBuilder gsonBuilder = new GsonBuilder();
         gsonBuilder.registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter());
         return gsonBuilder.create();
-
-
     }
 
     public static void main(String[] args) throws IOException, InterruptedException {
@@ -215,17 +212,9 @@ public class HttpTaskServer {
         switch (h.getRequestMethod()) {
             case "GET": {
                 if (query == null) {
-                    final List<Task> tasks = taskManager.getTasks();
+                    final List<Task> tasks = taskManager.getPrioritizedTasks();
                     final String response = gson.toJson(tasks);
                     System.out.println("Получили все задачи");
-                    sendText(h, response);
-                    final List<Subtask> subtasks = taskManager.getSubtasks();
-                    final String response2 = gson.toJson(subtasks);
-                    System.out.println("Получили все подзадачи");
-                    sendText(h, response);
-                    final List<Epic> epics = taskManager.getEpics();
-                    final String response3 = gson.toJson(epics);
-                    System.out.println("Получили все эпики");
                     sendText(h, response);
                     break;
                 }
