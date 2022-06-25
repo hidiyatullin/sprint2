@@ -25,7 +25,7 @@ import java.util.List;
 import static java.nio.charset.StandardCharsets.UTF_8;
 
 public class HttpTaskServer {
-    TaskManager taskManager = Managers.getDefault();
+    private TaskManager taskManager = Managers.getDefault();
     private static Gson gson;
     HttpServer server;
     int PORT = 8080;

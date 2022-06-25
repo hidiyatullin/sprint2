@@ -13,6 +13,7 @@ import java.util.ArrayList;
 public class HttpTaskManager extends FileBackedTasksManager {
     Gson gson;
     KVTaskClient client;
+    int maxId = 0;
 
     public HttpTaskManager() {
         try {
@@ -40,8 +41,8 @@ public class HttpTaskManager extends FileBackedTasksManager {
         }.getType());
         for (Task task : tasksArrayList) {
             tasks.put(task.getId(), task);
-            if (id < task.getId()) {
-                id = task.getId();
+            if (maxId < task.getId()) {
+                maxId = task.getId();
             }
             prioritizedTasks.add(task);
         }
@@ -49,8 +50,8 @@ public class HttpTaskManager extends FileBackedTasksManager {
         }.getType());
         for (Epic epic : epicsArrayList) {
             epics.put(epic.getId(), epic);
-            if (id < epic.getId()) {
-                id = epic.getId();
+            if (maxId < epic.getId()) {
+                maxId = epic.getId();
             }
         }
         ArrayList<Subtask> subtasksArrayList = gson.fromJson(client.load("subtasks"), new TypeToken<ArrayList<Subtask>>() {
@@ -59,11 +60,12 @@ public class HttpTaskManager extends FileBackedTasksManager {
             subtasks.put(subtask.getId(), subtask);
             Epic epic = epics.get(subtask.getEpicId());
             epic.addSubtask(subtask);
-            if (id < subtask.getId()) {
-                id = subtask.getId();
+            if (maxId < subtask.getId()) {
+                maxId = subtask.getId();
             }
             prioritizedTasks.add(subtask);
         }
+        id = maxId;
         ArrayList<Task> historyArrayList = gson.fromJson(client.load("history"), new TypeToken<ArrayList<Task>>() {
         }.getType());
         for (Task task : historyArrayList) {
@@ -71,11 +73,11 @@ public class HttpTaskManager extends FileBackedTasksManager {
             }
     }
 
-    @Override
-    public int generatorId() {
-        id++;
-        return id;
-    }
+//    @Override
+//    public int generatorId() {
+//        id++;
+//        return id;
+//    }
 
 
 
